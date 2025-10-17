@@ -1,0 +1,78 @@
+.styleBar {
+  display: flex;
+  gap: 12px;
+  padding: 20px 30px;
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  overflow-x: auto;
+  flex-shrink: 0;
+}
+
+.addStyleBtn {
+  min-width: 80px;
+  height: 80px;
+  border: 2px dashed #d0d0d0;
+  background-color: white;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.addStyleBtn:hover {
+  border-color: #999;
+  background-color: #f9f9f9;
+}
+
+.plusIcon {
+  font-size: 32px;
+  color: #666;
+  font-weight: 300;
+}
+
+.styleCard {
+  min-width: 80px;
+  height: 80px;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.styleCard:hover {
+  border-color: #666;
+  transform: scale(1.05);
+}
+
+.styleCard.selected {
+  border-color: #000;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.styleImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scrollbar Styling */
+.styleBar::-webkit-scrollbar {
+  height: 6px;
+}
+
+.styleBar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.styleBar::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 3px;
+}
+
+.styleBar::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+

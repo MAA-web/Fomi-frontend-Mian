@@ -1,0 +1,40 @@
+.generationArea {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.emptyState {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: #999;
+  font-size: 16px;
+  text-align: center;
+}
+
+.generationsList {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Scrollbar Styling */
+.generationArea::-webkit-scrollbar {
+  width: 8px;
+}
+
+.generationArea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.generationArea::-webkit-scrollbar-thumb {
+  background: #d0d0d0;
+  border-radius: 4px;
+}
+
+.generationArea::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+

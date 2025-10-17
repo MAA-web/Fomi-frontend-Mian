@@ -1,0 +1,315 @@
+/* Main container with light grey background */
+.container {
+  min-height: 100vh;
+  background-color: #FBFAF7;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Main content area with flex layout */
+.mainContent {
+  display: flex;
+   height: calc(100vh - 120px); /* Account for header height */
+  padding: 16px;
+  gap: 16px;
+}
+
+/* Left Sidebar - Controls and Inputs */
+.sidebar {
+  width: 280px;
+  background-color: #f8f8f8;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Top Input/Display Area */
+.inputArea {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.inputBox {
+  height: 180px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 12px;
+  /* Empty area for text input or preview display */
+}
+
+.generateButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.generateButton:hover {
+  background-color: #e8e8e8;
+  border-color: #c0c0c0;
+}
+
+.sparkleIcon {
+  width: 14px;
+  height: 14px;
+  color: #333;
+}
+
+/* Resolution/Scale Buttons */
+.resolutionButtons {
+  display: flex;
+  gap: 6px;
+}
+
+.resolutionButton {
+  flex: 1;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  padding: 6px 10px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resolutionButton:hover {
+  background-color: #e8e8e8;
+  border-color: #c0c0c0;
+}
+
+/* Dropdown Menus */
+.dropdowns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dropdown {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown:hover {
+  background-color: #e8e8e8;
+  border-color: #c0c0c0;
+}
+
+.dropdownLabel {
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+}
+
+.chevronIcon {
+  width: 14px;
+  height: 14px;
+  color: #666;
+}
+
+/* Main Content Area - Right Side */
+.contentArea {
+  flex: 1;
+  background-color: white;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Vertical divider line */
+.divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #e0e0e0;
+  transform: translateX(-50%);
+}
+
+/* Top-left button */
+.topLeftButton {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topLeftButton:hover {
+  background-color: #e8e8e8;
+  border-color: #c0c0c0;
+}
+
+/* Top-right button */
+.topRightButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background-color: #f0f0f0;
+  border: 1px solid #d0d0d0;
+  border-radius: 16px;
+  padding: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.topRightButton:hover {
+  background-color: #e8e8e8;
+  border-color: #c0c0c0;
+}
+
+.buttonIcon {
+  width: 14px;
+  height: 14px;
+  color: #333;
+}
+
+/* Image Comparison Area */
+.compareArea {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.compareComponent {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 600px;
+  max-height: 600px;
+}
+
+/* Upload Area */
+.uploadArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 2px dashed #d0d0d0;
+  border-radius: 12px;
+  background-color: #fafafa;
+  transition: all 0.2s ease;
+  position: relative;
+  padding: 20px;
+}
+
+.uploadArea:hover {
+  border-color: #a0a0a0;
+  background-color: #f5f5f5;
+}
+
+.uploadSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.uploadTitle {
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+  text-align: center;
+}
+
+.imageUpload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 20px;
+  border: 2px dashed #d0d0d0;
+  border-radius: 8px;
+  background-color: white;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.imageUpload:hover {
+  border-color: #a0a0a0;
+  background-color: #f9f9f9;
+}
+
+.uploadLabel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.uploadIcon {
+  width: 32px;
+  height: 32px;
+  color: #666;
+}
+
+.uploadText {
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  text-align: center;
+}
+
+.fileInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.imagePreview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #e0e0e0;
+  margin-top: 8px;
+}

@@ -1,0 +1,372 @@
+'use client'
+
+import { ChevronDown, Sparkles, Settings, Clock, Play, History } from "lucide-react"
+import { useState, useRef, useEffect, useCallback } from "react"
+import CreditValidation from "../../ui/CreditValidation"
+import generationApi from "../../../lib/api/generation"; 
+
+
+export default function InputControls({ onGenerate, isGenerating, onToggleHistory, isHistoryOpen = false }) {
+  const [prompt, setPrompt] = useState("")
+  const [totalImages, setTotalImages] = useState(1)
+  const [modelUsed, setModelUsed] = useState("img2img-v1")
+  const [params, setParams] = useState({})
+  const [aspectRatio, setAspectRatio] = useState("square")
+  const [showAdvanced, setShowAdvanced] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [models, setModels] = useState([]) 
+  const [creditValidation, setCreditValidation] = useState(null)
+  const [paramValues, setParamValues] = useState({});
+  const [duration, setDuration] = useState(2);
+  const [fps, setFps] = useState(24);
+  const [quality, setQuality] = useState("standard");
+  const [motion, setMotion] = useState("medium");
+
+    // Current model based on selected model
+  const currentModel = models.find((m) => m.name === modelUsed);
+  
+      // Fetch models from backend on mount
+    useEffect(() => {
+      async function fetchModels() {
+        try {
+          const data = await generationApi.getModels("video") // GET /models?page=ImageGen
+          if (data.success && data.models) {
+            setModels(data.models)
+            if (data.models.length > 0) {
+              setModelUsed(data.models[0].name) // default model
+            }
+          }
+        } catch (err) {
+          console.error("❌ Failed to fetch models:", err)
+        }
+      }
+      fetchModels()
+    }, [])
+
+    useEffect(() => {
+        const currentModel = models.find((m) => m.name === modelUsed);
+        if (currentModel?.model_params) {
+          const parsed = JSON.parse(currentModel.model_params);
+          setParamValues(Object.fromEntries(Object.entries(parsed).map(([k, v]) => [k, v])));
+        }
+    }, [models, modelUsed]);
+
+      // Use useCallback to prevent unnecessary re-renders
+      const generateArt = useCallback(async () => {
+        if (isSubmitting || isGenerating || !prompt.trim()) return
+    
+        setIsSubmitting(true)
+        try {
+          // Create params object
+          const newParams = {
+            aspectRatio: aspectRatio
+          };
+          setParams(newParams); // Update the params state
+    
+          await onGenerate(prompt, totalImages, newParams, modelUsed) // Pass the params object
+    
+        } finally {
+          setTimeout(() => setIsSubmitting(false), 1000)
+        }
+      }, [isGenerating, isSubmitting, onGenerate, prompt, totalImages, aspectRatio, modelUsed, setParams]);
+  
+  return (
+    <div className="w-80 h-full flex flex-col space-y-6">
+      {/* Main Input Section */}
+      <div className="bg-[#f9f3f0] rounded-2xl p-6 shadow-sm border border-gray-200">
+        <div className="space-y-4">
+          {/* Prompt Input */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Describe your video scene
+            </label>
+            <textarea
+              placeholder="A peaceful ocean wave crashing against rocky cliffs at sunset..."
+              className="w-full h-24 p-3 text-sm border border-gray-300 rounded-xl resize-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors bg-white"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+            />
+          </div>
+
+          {/* Model Selection (Dropdown with Rounded List) */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              AI Model
+            </label>
+            <div className="relative">
+              <select
+                value={modelUsed}
+                onChange={(e) => setModelUsed(e.target.value)}
+                className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] 
+                          focus:ring-2 focus:ring-purple-500 focus:border-transparent 
+                          transition-colors appearance-none pr-8"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                  backgroundPosition: 'right 0.5rem center',
+                  backgroundRepeat: 'no-repeat',
+                  backgroundSize: '1.5em 1.5em'
+                }}
+              >
+                {models.length === 0 ? (
+                  <>
+                    {/* Fallback while models load */}
+                    <option disabled>Loading models...</option>
+                  </>
+                ) : (
+                  models.map((m) => (
+                    <option key={m.id || m.name} value={m.name}>
+                      {m.display_name || m.name}
+                    </option>
+                  ))
+                )}
+              </select>
+            </div>
+          </div>
+
+          {/* Duration and Aspect Ratio */}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Duration
+              </label>
+              <div className="relative">
+                <select
+                  value={duration}
+                  onChange={(e) => setDuration(parseInt(e.target.value))}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors appearance-none pr-8"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em'
+                  }}
+                >
+                  <option value={5}>5 seconds</option>
+                  <option value={10}>10 seconds</option>
+                  <option value={15}>15 seconds</option>
+                  <option value={20}>20 seconds</option>
+                  <option value={30}>30 seconds</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Aspect Ratio
+              </label>
+              <div className="relative">
+                <select
+                  value={aspectRatio}
+                  onChange={(e) => setAspectRatio(e.target.value)}
+                  className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors appearance-none pr-8"
+                  style={{
+                    backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                    backgroundPosition: 'right 0.5rem center',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: '1.5em 1.5em'
+                  }}
+                >
+                  <option value="16:9">Landscape (16:9)</option>
+                  <option value="9:16">Portrait (9:16)</option>
+                  <option value="1:1">Square (1:1)</option>
+                  <option value="4:3">Classic (4:3)</option>
+                </select>
+              </div>
+          </div>
+
+          {/* Generate Button */}
+          <button
+            onClick={async () => {
+              if (isSubmitting || isGenerating || !prompt.trim()) return
+
+              setIsSubmitting(true)
+              try {
+                if (onGenerate) {
+                  await onGenerate(prompt, duration, modelUsed, aspectRatio, fps)
+                }
+              } finally {
+                // Add a small delay before allowing another click to prevent rapid clicking
+                setTimeout(() => setIsSubmitting(false), 1000)
+              }
+            }}
+            disabled={isGenerating || isSubmitting || !prompt.trim()}
+            className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-[0.98] shadow-lg"
+          >
+            <Play className="w-5 h-5" />
+            <span>{isGenerating || isSubmitting ? "Generating..." : "Generate Video"}</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex gap-3">
+        {/* History Button */}
+        <button
+          onClick={onToggleHistory}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+            isHistoryOpen 
+              ? 'bg-purple-100 text-purple-700 border-2 border-purple-200' 
+              : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+          }`}
+        >
+          <History className="w-4 h-4" />
+          <span>{isHistoryOpen ? 'Hide History' : 'View History'}</span>
+        </button>
+
+        {/* Advanced Options Button */}
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
+            showAdvanced 
+              ? 'bg-gray-100 text-gray-700 border-2 border-gray-200' 
+              : 'bg-white text-gray-700 border border-gray-200 hover:bg-gray-50'
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          <span>Advanced</span>
+        </button>
+      </div>
+
+      {/* Advanced Options */}
+      <div className="bg-[#f9f3f0] rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        {showAdvanced && currentModel && (
+          <div className="px-4 pb-4 space-y-4 border-t border-gray-200">
+            <h4 className="font-medium text-gray-700 mb-3">Advanced Parameters</h4>
+
+            {currentModel.model_params ? (
+              (() => {
+                const parsedParams = JSON.parse(currentModel.model_params);
+
+                // Define sensible defaults
+                const defaults = {
+                  fps: [12, 24, 30, 60],
+                  quality: ["standard", "high", "ultra"],
+                  motion: ["low", "medium", "high", "dynamic"],
+                };
+
+                // Merge model_params with defaults (BE params overwrite if present)
+                const combinedParams = {
+                  ...defaults,
+                  ...parsedParams,
+                };
+
+                return (
+                  <>
+                    {/* FPS Setting */}
+                    {combinedParams.fps && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Frame Rate (FPS)
+                        </label>
+                        <select
+                          value={fps}
+                          onChange={(e) => setFps(parseInt(e.target.value))}
+                          className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors appearance-none pr-8"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                            backgroundPosition: 'right 0.5rem center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: '1.5em 1.5em'
+                          }}
+                        >
+                          {combinedParams.fps.map((val) => (
+                            <option key={val} value={val}>
+                              {val} FPS
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Quality Setting */}
+                    {combinedParams.quality && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Quality
+                        </label>
+                        <select
+                          value={quality}
+                          onChange={(e) => setQuality(e.target.value)}
+                          className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors appearance-none pr-8"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                            backgroundPosition: 'right 0.5rem center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: '1.5em 1.5em'
+                          }}
+                        >
+                          {combinedParams.quality.map((val) => (
+                            <option key={val} value={val}>
+                              {val.charAt(0).toUpperCase() + val.slice(1)} Quality
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+
+                    {/* Motion Intensity */}
+                    {combinedParams.motion && (
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Motion Intensity
+                        </label>
+                        <select
+                          value={motion}
+                          onChange={(e) => setMotion(e.target.value)}
+                          className="w-full p-3 text-sm border border-gray-300 rounded-2xl bg-[#faf7f4] focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-colors appearance-none pr-8"
+                          style={{
+                            backgroundImage: `url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e")`,
+                            backgroundPosition: 'right 0.5rem center',
+                            backgroundRepeat: 'no-repeat',
+                            backgroundSize: '1.5em 1.5em'
+                          }}
+                        >
+                          {combinedParams.motion.map((val) => (
+                            <option key={val} value={val}>
+                              {val.charAt(0).toUpperCase() + val.slice(1)} Motion
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                  </>
+                );
+              })()
+            ) : (
+              <p className="text-sm text-gray-500">No advanced parameters available.</p>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Generation Stats */}
+      <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-200 flex-1">
+        <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+          <Clock className="w-4 h-4" />
+          <span className="font-medium">Generation Info</span>
+        </div>
+        <div className="space-y-2 text-xs text-gray-500">
+          <div className="flex justify-between">
+            <span>Estimated time:</span>
+            <span className="font-medium">{duration * 2}-{duration * 4} seconds</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Resolution:</span>
+            <span className="font-medium">
+              {aspectRatio === "16:9" ? "1920×1080" :
+               aspectRatio === "9:16" ? "1080×1920" :
+               aspectRatio === "1:1" ? "1080×1080" : "1440×1080"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Format:</span>
+            <span className="font-medium">MP4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+
+

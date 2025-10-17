@@ -1,0 +1,111 @@
+/* Social Media Spotlight Button Styles */
+.lightButton {
+  position: relative;
+}
+
+.bt {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  position: relative;
+  outline: none;
+}
+
+.buttonHolder {
+  width: 50px;
+  height: 50px;
+  background: #1f2937;
+  border-radius: 10px;
+  box-shadow: 0px 15px 40px 5px rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.buttonHolder svg {
+  width: 24px;
+  height: 24px;
+  fill: white;
+  z-index: 3;
+  position: relative;
+}
+
+.lightHolder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 8px;
+  height: 8px;
+  background: #00ff00;
+  border-radius: 50%;
+  animation: blink 2s infinite;
+  z-index: 4;
+}
+
+.light {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0.2) 40%, transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+/* Hover Effects */
+.bt:hover .buttonHolder {
+  transform: translateY(-5px);
+  box-shadow: 0px 20px 50px 10px rgba(0, 0, 0, 0.6);
+}
+
+.bt:hover .light {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  animation: pulse 1.5s infinite;
+}
+
+.bt:hover .dot {
+  animation: blink 0.5s infinite;
+}
+
+/* Animations */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+}
+

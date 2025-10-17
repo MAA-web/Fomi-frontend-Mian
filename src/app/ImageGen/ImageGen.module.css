@@ -1,0 +1,31 @@
+.pageWrapper {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fafafa;
+}
+
+.container {
+  width: 100%;
+  height: calc(100vh - 120px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Main Content Area */
+.mainContent {
+  display: flex;
+  gap: 20px;
+  padding: 20px 30px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .mainContent {
+    flex-direction: column;
+    height: auto;
+  }
+}
+

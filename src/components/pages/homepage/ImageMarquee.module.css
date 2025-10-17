@@ -1,0 +1,86 @@
+/* Image Marquee Styles */
+.marqueeContainer {
+  background-color: #000000;
+  padding: 32px 0;
+  overflow: hidden;
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+}
+
+.marqueeRow {
+  margin-bottom: 16px;
+  overflow: hidden;
+  position: relative;
+}
+
+.marqueeRow:last-child {
+  margin-bottom: 0;
+}
+
+.marqueeLeft {
+  display: flex;
+  animation: marqueeLeft 40s linear infinite;
+}
+
+.marqueeRight {
+  display: flex;
+  animation: marqueeRight 45s linear infinite;
+}
+
+.marqueeItem {
+  flex-shrink: 0;
+  margin: 0 8px;
+}
+
+.marqueeImage {
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.marqueeImage:hover {
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes marqueeLeft {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marqueeRight {
+  0% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .marqueeContainer {
+    padding: 24px 0;
+  }
+  
+  .marqueeRow {
+    margin-bottom: 12px;
+  }
+  
+  .marqueeImage {
+    width: 96px;
+    height: 96px;
+  }
+  
+  .marqueeItem {
+    margin: 0 6px;
+  }
+}
