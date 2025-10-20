@@ -262,7 +262,7 @@ export default function Header() {
   
   return (
     // <header className="top-0 py-8 relative max-w-full px-4 z-[1000]">
-    <header className="relative top-0 left-0 max-w-full h-[57px] z-100">
+    <header className="relative top-0 left-0 max-w-full h-[57px] z-1000">
 
       <div className="flex items-center justify-between max-w-full">
         {/* Logo - Left side */}
@@ -271,7 +271,7 @@ export default function Header() {
         </div>
 
           {/* Navigation Icons - Centered absolutely with dock effect */}
-         <div className="z-1000 absolute left-1/2 transform -translate-x-1/2 -translate-y-2">
+         <div className="z-1000 absolute top-4 left-1/2 transform -translate-x-1/2 -translate-y-2">
             <Dock 
               className="gap-[57px] p-0 rounded-xl "
               iconSize={22}
@@ -280,7 +280,7 @@ export default function Header() {
               style={{}}
             >
           {/* white bar above the buttons */}
-         <div className='bg-[#f6e9e3] w-full h-[10px] rounded-2xl absolute top-2'></div>
+          <div className='bg-[#f6e9e3] w-full h-[10px] rounded-2xl absolute top-2'></div>
               
             <DockIcon>
               <div className="pt-4 relative group hover:bg-transparent" style={{ background: 'transparent' }}>
@@ -451,7 +451,7 @@ export default function Header() {
       {showHomeDropdown && (
         <div 
           ref={homeDropdownRef}
-          className="fixed top-24 left-1/2 transform -translate-x-1/2 backdrop-blur-xl bg-[#f9f3f0]/90 dark:bg-gray-800/90 rounded-xl shadow-2xl border border-orange-200/40 dark:border-orange-700/40 py-6 min-w-[600px] z-[99999]"
+          className="fixed top-24 left-1/2 transform -translate-x-1/2 backdrop-blur-xl bg-[#f9f3f0]/90 dark:bg-gray-800/90 rounded-xl shadow-2xl border border-orange-200/40 dark:border-orange-700/40 py-6 min-w-[600px] z-100"
           onMouseEnter={keepDropdownOpen}
           onMouseLeave={closeHomeDropdown}
           onClick={(e) => e.stopPropagation()}

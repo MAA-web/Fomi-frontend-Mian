@@ -364,10 +364,10 @@ function PricingPageContent() {
   // }
 
   return (
-    <div className="min-h-screen bg-[#fbfaf7]">
+    <div className="m-0 bg-[#fbfaf7]">
       <Header />
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <div>
         <div className="px-10 py-8">
           <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -378,7 +378,7 @@ function PricingPageContent() {
             </p>
             {/* Current Plan Display */}
             {(isAuthenticated || authTimeout) && (
-              <div className="mt-4 space-y-2">
+              <div className="mt-4 space-y-2 hidden">
                 <div className="inline-flex items-center bg-gray-100 px-4 py-2 rounded-full">
                   <span className="text-sm text-gray-600">Current Plan: </span>
                   <span className="ml-1 font-semibold text-gray-900 capitalize">{userPlan}</span>
@@ -541,6 +541,10 @@ function PricingPageContent() {
           </div>
         </div>
 
+
+
+
+
         {/* Pricing Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pricingPlans.map((plan) => {
@@ -557,7 +561,7 @@ function PricingPageContent() {
               return (
               <div
                key={plan.id}
-                  className={`relative bg-white rounded-[23px] border-[#766F67] border-[9px] transition-all duration-300 hover:shadow-lg `}
+                  className={`relative rounded-[23px] bg-[linear-gradient(217deg,_#C5BEB6_-1.7%,_#746D65_95.57%)] transition-all duration-300 hover:shadow-lg `}
                 >
                 {/* Current Plan Badge */}
                 {isCurrentPlan && (
@@ -575,21 +579,21 @@ function PricingPageContent() {
                 <div className="p-8">
                   {/* Plan Header */}
                   <div className="text-center mb-8">
-                    <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r ${getPlanColor(plan.id)} text-white mb-4`}>
+                    {/* <div className={`inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r ${getPlanColor(plan.id)} text-white mb-4`}>
                       {getPlanIcon(plan.id)}
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                    <p className="text-gray-600 mb-6">{plan.description}</p>
+                    </div> */}
+                    <h3 className="text-2xl text-left font-bold text-[#DCB79B] mb-2">{plan.name}</h3>
+                    {/* <p className="text-gray-600 mb-6">{plan.description}</p> */}
                     
                     {/* Price */}
                     <div className="mb-6">
                       {plan.price === 0 ? (
-                        <div className="text-4xl font-bold text-gray-900">Free</div>
+                        <div className="text-xl text-left text-[#E0BD9D]">Free</div>
                       ) : (
                         <>
-                          <div className="text-4xl font-bold text-gray-900">
+                          <div className="text-xl text-left text-[#E0BD9D]">
                             ${billingInterval === 'year' ? (plan.price * 12 * 0.8).toFixed(2) : plan.price}
-                            <span className="text-lg font-normal text-gray-600">
+                            <span className="text-xs font-normal text-[#E0BD9D]">
                               /{billingInterval === 'year' ? 'year' : 'month'}
                             </span>
                           </div>
@@ -603,7 +607,7 @@ function PricingPageContent() {
                     </div>
 
                     {/* CTA Button */}
-                    <button
+                    {/* <button
                       onClick={() => handleSubscribe(plan)}
                       disabled={loading === plan.id || isCurrentPlan}
                       className={`w-full py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
@@ -617,7 +621,74 @@ function PricingPageContent() {
                           ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                           : 'bg-gray-900 text-white hover:bg-gray-800'
                       }`}
-                    >
+                      >
+                      {loading === plan.id ? (
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          <span>
+                            {isCurrentPlan 
+                              ? 'Current Plan' 
+                              : isDowngrade 
+                              ? 'Downgrade' 
+                              : isUpgrade 
+                              ? `Upgrade to ${plan.name}` 
+                              : plan.buttonText
+                            }
+                          </span>
+                          {!isCurrentPlan && plan.price > 0 && <ArrowRight className="w-4 h-4" />}
+                        </>
+                      )}
+                    </button> */}
+                  </div>
+
+                  {/* Features */}
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
+                      What's included:
+                    </h4>
+                      <ul className="space-y-3">
+                      {plan.features.map((feature, index) => (
+                        <li key={index} className="flex items-start space-x-3">
+                          <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                          <span className="text-gray-700">{feature}</span>
+                        </li>
+                        ))}
+                      </ul>
+              
+                        {/* Limitations */}
+                        {plan.limitations.length > 0 && (
+                          <>
+                            <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide mt-6">
+                              Limitations:
+                            </h4>
+                            <ul className="space-y-3">
+                              {plan.limitations.map((limitation, index) => (
+                                <li key={index} className="flex items-start space-x-3">
+                                  <X className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                                  <span className="text-gray-600 text-sm">{limitation}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                  </div>
+                  {/* CTA Button */}
+                  <button
+                      onClick={() => handleSubscribe(plan)}
+                      disabled={loading === plan.id || isCurrentPlan}
+                      className={`w-full py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center space-x-2 ${
+                        isCurrentPlan
+                          ? 'bg-green-100 cursor-not-allowed hover:shadow-lg transform hover:scale-105'
+                          : plan.popular && !isCurrentPlan
+                          ? 'bg-white hover:shadow-lg transform hover:scale-105'
+                          : plan.price === 0
+                          ? 'bg-gray-100 cursor-not-allowed'
+                          : isDowngrade
+                          ? 'bg-white hover:shadow-lg transform hover:scale-105'
+                          : 'bg-white hover:shadow-lg transform hover:scale-105'
+                      }`}
+                      >
                       {loading === plan.id ? (
                         <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                       ) : (
@@ -636,39 +707,7 @@ function PricingPageContent() {
                         </>
                       )}
                     </button>
-                  </div>
 
-                  {/* Features */}
-                  <div className="space-y-4">
-                    <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide">
-                      What's included:
-                    </h4>
-                    <ul className="space-y-3">
-                {plan.features.map((feature, index) => (
-                        <li key={index} className="flex items-start space-x-3">
-                          <Check className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                          <span className="text-gray-700">{feature}</span>
-                        </li>
-                ))}
-              </ul>
-              
-                        {/* Limitations */}
-                        {plan.limitations.length > 0 && (
-                          <>
-                            <h4 className="font-semibold text-gray-900 text-sm uppercase tracking-wide mt-6">
-                              Limitations:
-                            </h4>
-                            <ul className="space-y-3">
-                              {plan.limitations.map((limitation, index) => (
-                                <li key={index} className="flex items-start space-x-3">
-                                  <X className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-600 text-sm">{limitation}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
-                      </div>
                     </div>
                   </div>
               );
@@ -676,7 +715,7 @@ function PricingPageContent() {
           </div>
 
           {/* Feature Comparison */}
-          <div className="mt-20">
+          <div className="bg-[#F4F3EE] p-4 rounded-2xl mt-20">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Compare All Features
@@ -736,13 +775,14 @@ function PricingPageContent() {
 
           {/* FAQ Section */}
           <div className="mt-20">
-            <div className="text-center mb-12">
+
+            <div className="text-left mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
                 Frequently Asked Questions
-          </h2>
+              </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-8 bg-[#F4F3EE] rounded-2xl">
               <div className="bg-white rounded-xl p-6 border border-gray-200">
                 <h3 className="font-semibold text-gray-900 mb-3">Can I change plans anytime?</h3>
                 <p className="text-gray-600">
